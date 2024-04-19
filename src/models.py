@@ -46,3 +46,30 @@ class Planeta(db.Model):
             "clima": self.clima,
             # do not serialize the password, its a security breach
         }
+    
+
+class Personajes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(120), unique=True, nullable=False)
+    raza = db.Column(db.String(80), unique=False, nullable=False)
+    altura = db.Column(db.String(80), unique=False, nullable=False)
+    peso = db.Column(db.String(80), unique=False, nullable=False)
+    sexo = db.Column(db.String(250))
+    color_pelo = db.Column(db.String(250))
+    
+    
+
+    def __repr__(self):
+        return '<Personajes %r>' % self.Personajes
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "raza": self.raza,
+            "altura": self.altura,
+            "peso": self.peso,
+            "sexo": self.sexo,
+            "color_pelo": self.color_pelo,
+            # do not serialize the password, its a security breach
+        }
