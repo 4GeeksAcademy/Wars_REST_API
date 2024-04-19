@@ -18,17 +18,15 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
 
-
+#aqui empiezo a añadir codigo---------------------------
 class Planeta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), unique=True, nullable=False)
     gravedad = db.Column(db.String(80), unique=False, nullable=False)
     poblacion = db.Column(db.String(80), unique=False, nullable=False)
     habitable = db.Column(db.String(80), unique=False, nullable=False)
-
-   
-    tipo = db.Column(db.String(250))
-    clima = db.Column(db.String(250))
+    tipo = db.Column(db.String(250), unique=False, nullable=False)
+    clima = db.Column(db.String(250), unique=False, nullable=False)
     
     
 
@@ -48,19 +46,19 @@ class Planeta(db.Model):
         }
     
 
-class Personajes(db.Model):
+class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), unique=True, nullable=False)
     raza = db.Column(db.String(80), unique=False, nullable=False)
     altura = db.Column(db.String(80), unique=False, nullable=False)
     peso = db.Column(db.String(80), unique=False, nullable=False)
-    sexo = db.Column(db.String(250))
-    color_pelo = db.Column(db.String(250))
+    sexo = db.Column(db.String(80), unique=False, nullable=False)
+    color_pelo = db.Column(db.String(80), unique=False, nullable=False)
     
     
 
     def __repr__(self):
-        return '<Personajes %r>' % self.Personajes
+        return '<People %r>' % self.people
 
     def serialize(self):
         return {
@@ -81,8 +79,8 @@ class Vehiculos(db.Model):
     tipo = db.Column(db.String(80), unique=False, nullable=False)
     velocidad = db.Column(db.String(80), unique=False, nullable=False)
     peso = db.Column(db.String(80), unique=False, nullable=False)
-    tripulacion = db.Column(db.String(250))
-    armamento = db.Column(db.String(250))
+    tripulacion = db.Column(db.String(80), unique=False, nullable=False)
+    armamento = db.Column(db.String(80), unique=False, nullable=False)
     
     
 
