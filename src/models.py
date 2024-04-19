@@ -73,3 +73,30 @@ class Personajes(db.Model):
             "color_pelo": self.color_pelo,
             # do not serialize the password, its a security breach
         }
+    
+
+class Vehiculos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(120), unique=True, nullable=False)
+    tipo = db.Column(db.String(80), unique=False, nullable=False)
+    velocidad = db.Column(db.String(80), unique=False, nullable=False)
+    peso = db.Column(db.String(80), unique=False, nullable=False)
+    tripulacion = db.Column(db.String(250))
+    armamento = db.Column(db.String(250))
+    
+    
+
+    def __repr__(self):
+        return '<Vehiculos %r>' % self.Vehiculos
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "tipo": self.raza,
+            "velocidad": self.velocidad,
+            "peso": self.peso,
+            "tripulacion": self.tripulacion,
+            "armamento": self.armamento,
+            # do not serialize the password, its a security breach
+        }
