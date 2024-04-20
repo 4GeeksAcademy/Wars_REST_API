@@ -67,10 +67,7 @@ def handle_people():
 
 #endpoints de planetas------------------------------------
 @app.route('/planeta', methods=['GET'])
-def get_all_planetas():
-
-    query_results = Planeta.query.all()
-    print(query_results)
+def ghandle_planeta():
 
     response_body = {
         "msg": "Hello, this is your GET /planeta response "

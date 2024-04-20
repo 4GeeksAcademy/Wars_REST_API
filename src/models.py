@@ -85,7 +85,7 @@ class Vehiculos(db.Model):
     
 
     def __repr__(self):
-        return '<Vehiculos %r>' % self.Vehiculos
+        return '<Vehiculos %r>' % self.vehiculos
 
     def serialize(self):
         return {
