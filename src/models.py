@@ -9,7 +9,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.id
 
     def serialize(self):
         return {
@@ -31,7 +31,7 @@ class Planeta(db.Model):
     
 
     def __repr__(self):
-        return '<Planeta %r>' % self.planeta
+        return '<Planeta %r>' % self.id
 
     def serialize(self):
         return {
@@ -58,7 +58,7 @@ class People(db.Model):
     
 
     def __repr__(self):
-        return '<People %r>' % self.people
+        return '<People %r>' % self.id
 
     def serialize(self):
         return {

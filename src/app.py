@@ -60,7 +60,7 @@ def ghandle_user_favorito():
     return jsonify(response_body), 200
 
 
-#endpoint de people--------------------------------
+                                    #endpoint de people--------------------------------
 
 @app.route('/people', methods=['GET'])
 def handle_people():
@@ -71,17 +71,42 @@ def handle_people():
 
     return jsonify(response_body), 200
 
+                                    #endpoint para 1 solo personaje------------------
 
 @app.route('/people/<int:people_id>', methods=['GET'])
-def ghandle_people_favorito():
+def get_one_people(people_id):
+  #  print(people_id)
+
+    people_query = People.query.filter_by(id=people_id).first()
+    print(people_query)
+   
+    if people_query is None:
+        return jsonify({"msg":"people info no found"}),404
 
     response_body = {
-        "msg": "Hello, this is your GET /people/favorito response "
-    }
+        "msg": "ok",
+        "result": people_query.serialize()
+     }
 
     return jsonify(response_body), 200
 
-#endpoint para obtener todos los personajes-----------------------
+                                    #endpoint para crear una personaje ------------------------------------------------
+
+
+@app.route('/people/', methods=['POST'])
+def create_people():
+    body= request.json
+    
+    people_query = People.query.filter_by(nombre=body["nombre"]).first()
+    if people_query is None:
+
+
+        new_people = People(nombre=body["nombre"], raza=body["raza"],altura=body["altura"],peso=body["peso"],sexo=body["sexo"],color_pelo=body["color_pelo"])
+        db.session.add(new_people)
+        db.session.commit()
+        return jsonify({"msg":"people created"}), 200
+    else:
+        return jsonify({"msg":"people exist"}), 400
 
 
 
@@ -96,7 +121,7 @@ def ghandle_planeta():
     return jsonify(response_body), 200
 
 @app.route('/planeta/<int:planeta_id>', methods=['GET'])
-def ghandle_planeta_favorito():
+def get_one_planeta():
 
     response_body = {
         "msg": "Hello, this is your GET /planeta/favorito response "
@@ -107,7 +132,7 @@ def ghandle_planeta_favorito():
 
 # endpoints de vehiculos---------------------
 
-@app.route('/vehiculos/<int:people_id>', methods=['GET'])
+@app.route('/vehiculos', methods=['GET'])
 def ghandle_vehiculos():
 
     response_body = {
@@ -118,7 +143,7 @@ def ghandle_vehiculos():
 
 
 @app.route('/vehiculos/<int:people_id>', methods=['GET'])
-def ghandle_vehiculos_favorito():
+def get_one_vehiculos():
 
     response_body = {
         "msg": "Hello, this is your GET /vehiculos/favorito response "
