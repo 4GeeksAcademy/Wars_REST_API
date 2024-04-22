@@ -98,3 +98,61 @@ class Vehiculos(db.Model):
             "armamento": self.armamento,
             # do not serialize the password, its a security breach
         }
+
+    #   aqui empieza los favoritos------------------------
+
+
+class FavoritosPlaneta(db.Model):
+    __tablename__ = "favoritos_planeta"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    planeta_id = db.Column(db.Integer, db.ForeignKey('planeta.id'))
+
+
+    def __repr__(self):
+        return '<FavoritosPlaneta %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "planeta": self.planeta_id_id,
+        } 
+
+
+class FavoritosPeople(db.Model):
+    __tablename__ = "favoritos_people"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+
+
+    def __repr__(self):
+        return '<FavoritosPeople %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "people": self.people_id_id,
+        } 
+
+
+class FavoritosVehiculos(db.Model):
+    __tablename__ = "favoritos_vehiculos"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    vehiculos_id = db.Column(db.Integer, db.ForeignKey('vehiculos.id'))
+
+
+    def __repr__(self):
+        return '<FavoritosVehiculos %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "vehiculos_id": self.vehiculos_id_id,
+        }   
+
+

@@ -50,6 +50,16 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
+@app.route('/user/<int:user_id>', methods=['GET'])
+def ghandle_user_favorito():
+
+    response_body = {
+        "msg": "Hello, this is your GET /user/favorito response "
+    }
+
+    return jsonify(response_body), 200
+
+
 #endpoint de people--------------------------------
 
 @app.route('/people', methods=['GET'])
@@ -57,6 +67,16 @@ def handle_people():
 
     response_body = {
         "msg": "Hello, this is your GET /people response "
+    }
+
+    return jsonify(response_body), 200
+
+
+@app.route('/people/<int:people_id>', methods=['GET'])
+def ghandle_people_favorito():
+
+    response_body = {
+        "msg": "Hello, this is your GET /people/favorito response "
     }
 
     return jsonify(response_body), 200
@@ -74,6 +94,40 @@ def ghandle_planeta():
     }
 
     return jsonify(response_body), 200
+
+@app.route('/planeta/<int:planeta_id>', methods=['GET'])
+def ghandle_planeta_favorito():
+
+    response_body = {
+        "msg": "Hello, this is your GET /planeta/favorito response "
+    }
+
+    return jsonify(response_body), 200
+
+
+# endpoints de vehiculos---------------------
+
+@app.route('/vehiculos/<int:people_id>', methods=['GET'])
+def ghandle_vehiculos():
+
+    response_body = {
+        "msg": "Hello, this is your GET /vehiculos response "
+    }
+
+    return jsonify(response_body), 200
+
+
+@app.route('/vehiculos/<int:people_id>', methods=['GET'])
+def ghandle_vehiculos_favorito():
+
+    response_body = {
+        "msg": "Hello, this is your GET /vehiculos/favorito response "
+    }
+
+    return jsonify(response_body), 200
+
+
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
