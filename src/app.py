@@ -60,7 +60,9 @@ def ghandle_user_favorito():
     return jsonify(response_body), 200
 
 
-                                    #endpoint de people--------------------------------
+
+
+   #endpoint de people--------------------------------
 
 @app.route('/people', methods=['GET'])
 def handle_people():
@@ -71,7 +73,7 @@ def handle_people():
 
     return jsonify(response_body), 200
 
-                                    #endpoint para 1 solo personaje------------------
+ #endpoint para 1 solo personaje------------------
 
 @app.route('/people/<int:people_id>', methods=['GET'])
 def get_one_people(people_id):
@@ -90,7 +92,7 @@ def get_one_people(people_id):
 
     return jsonify(response_body), 200
 
-                                    #endpoint para crear una personaje ------------------------------------------------
+ #endpoint para crear una personaje ------------------------------------------------
 
 
 @app.route('/people/', methods=['POST'])
