@@ -135,18 +135,18 @@ def delete_people():
         return jsonify({"msg":"people exist"}), 400
 
 #---------------------------------------------------------
-@app.route('/member/<int:member_id>', methods=['DELETE'])
-def delete_member(member_id):
-    jackson_family.delete_member(member_id)
+# @app.route('/member/<int:member_id>', methods=['DELETE'])
+# def delete_member(member_id):
+#     jackson_family.delete_member(member_id)
     
-    return jsonify({"msg":"El miembro ha sido borrado"}),200
+#     return jsonify({"msg":"El miembro ha sido borrado"}),200
 
-def delete_member(self, id):
-        # fill this method and update the return
-        for member in self._members:
-            if member["id"] == id:
-                self._members.remove(member)
-                return {"done":True}
+# def delete_member(self, id):
+#         # fill this method and update the return
+#         for member in self._members:
+#             if member["id"] == id:
+#                 self._members.remove(member)
+#                 return {"done":True}
 #------------------------------------------------------------
 
 
