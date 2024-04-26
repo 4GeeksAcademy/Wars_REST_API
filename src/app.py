@@ -117,18 +117,17 @@ def create_people():
     else:
         return jsonify({"msg":"people exist"}), 400
     
-    #endpoint para borrar al personaje--------------------------------------
+    #endpoint para borrar al personaje--------------------------------------no rompe pero no borra
 
 @app.route("/people/<int:people_id>", methods=["DELETE"])
-def delete_people():
-    body=request.json
+def delete_people(people_id):
+    
 
-    people_query = People.query.filter_by(nombre=body["nombre"]).first()
-    if people_query is None:
+    people_delete = People.query.filter_by(id=(people_id)).first()
+    if people_delete is None:
 
     
-        me = People(id=body["id"], nombre=body["nombre"],raza=body["raza"],altura=body["altura"],peso=body["peso"],sexo=body["sexp"],color_pelo=body["color_pelo"])
-        db.session.delete(me)
+        db.session.delete(people_delete)
         db.session.commit()
         return jsonify({"msg":"people delete"}), 200
     else:
