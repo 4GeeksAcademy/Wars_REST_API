@@ -117,14 +117,14 @@ def create_people():
     else:
         return jsonify({"msg":"people exist"}), 400
     
-    #endpoint para borrar al personaje--------------------------------------no rompe pero no borra
+    #endpoint para borrar al personaje--------------------------------------no rompe pero no borra ,ya borra
 
 @app.route("/people/<int:people_id>", methods=["DELETE"])
 def delete_people(people_id):
     
 
     people_delete = People.query.filter_by(id=(people_id)).first()
-    if people_delete is None:
+    if people_delete:
 
     
         db.session.delete(people_delete)
@@ -133,19 +133,7 @@ def delete_people(people_id):
     else:
         return jsonify({"msg":"people exist"}), 400
 
-#---------------------------------------------------------
-# @app.route('/member/<int:member_id>', methods=['DELETE'])
-# def delete_member(member_id):
-#     jackson_family.delete_member(member_id)
-    
-#     return jsonify({"msg":"El miembro ha sido borrado"}),200
 
-# def delete_member(self, id):
-#         # fill this method and update the return
-#         for member in self._members:
-#             if member["id"] == id:
-#                 self._members.remove(member)
-#                 return {"done":True}
 #------------------------------------------------------------
 
 
@@ -215,6 +203,9 @@ def login():
     return jsonify(access_token=access_token)
 
 
+
+
+
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.
 
@@ -240,4 +231,22 @@ if __name__ == '__main__':
 
 
 #voy por la ninea 115
-#modigicar 119 y añadir correctamente quien es el que se borra
+#modigicar 119 y añadir correctamente quien es el que se borraInstrucciones
+
+
+
+# hecho [GET] /people Listar todos los registros de people en la base de datos.
+# hecho [GET] /people/<int:people_id> Muestra la información de un solo personaje según su id.
+# hecho [GET] /planets Listar todos los registros de planets en la base de datos.
+# hecho [GET] /planets/<int:planet_id> Muestra la información de un solo planeta según su id.
+# Adicionalmente, necesitamos crear los siguientes endpoints para que podamos tener usuarios y favoritos en nuestro blog:
+
+# hecho [GET] /users Listar todos los usuarios del blog.
+# [GET] /users/favorites Listar todos los favoritos que pertenecen al usuario actual.
+# [POST] /favorite/planet/<int:planet_id> Añade un nuevo planet favorito al usuario actual con el id = planet_id.
+# [POST] /favorite/people/<int:people_id> Añade un nuevo people favorito al usuario actual con el id = people_id.
+# [DELETE] /favorite/planet/<int:planet_id> Elimina un planet favorito con el id = planet_id.
+# [DELETE] /favorite/people/<int:people_id> Elimina un people favorito con el id = people_id.
+# Tu API actual no tiene un sistema de autenticación (todavía), es por eso que la única forma de
+# crear usuarios es directamente en la base de datos usando el Flask admin. forma de crear usuarios 
+# es directamente en la base de datos usando el Flask admin.
