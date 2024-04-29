@@ -117,7 +117,7 @@ def create_people():
     else:
         return jsonify({"msg":"people exist"}), 400
     
-    #endpoint para borrar al personaje--------------------------------------no rompe pero no borra ,ya borra
+    #endpoint para borrar al personaje--------------------------------------no rompe pero no borra ,ya borra esta ok
 
 @app.route("/people/<int:people_id>", methods=["DELETE"])
 def delete_people(people_id):
