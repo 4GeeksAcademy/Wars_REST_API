@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User,Planeta,People,FavoritosPlaneta
+from models import db, User,Planeta,FavoritosPlaneta,People
 
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
@@ -44,10 +44,10 @@ def sitemap():
     return generate_sitemap(app)
 
 
-#endpoints-------------------------------------
+#endpoints------------USER-------------------------
 
 
-@app.route('/user', methods=['GET'])
+@app.route("/user", methods=['GET'])
 def handle_hello():
 
     response_body = {
@@ -66,6 +66,16 @@ def ghandle_user_favorito():
 
     return jsonify(response_body), 200
 
+
+@app.route("user/favorite", methods=["GET"])
+#@jwt_required()     #para proteger la ruta hay que ponerlo en todas la rutas con token
+def list_favorites():
+
+   
+
+    favorite_planet = FavoritosPlaneta.query.filter_by(user_id=user_id).all()
+ 
+    results_planet = list(map(lambda item:item.serialize(),favorite_planet))
 
 
 
@@ -102,7 +112,7 @@ def get_one_people(people_id):
  #endpoint para crear una personaje ------------------------------------------------
 
 
-@app.route('/people/', methods=['POST'])
+@app.route('/people', methods=['POST'])
 def create_people():
     body= request.json
     
@@ -141,8 +151,7 @@ def delete_people(people_id):
 
 #endpoints de planetas------------------------------------
 @app.route('/planeta', methods=['GET'])
-def handle_planeta():
-   
+def ghandle_planeta():
 
     response_body = {
         "msg": "Hello, this is your GET /planeta response "
@@ -152,15 +161,12 @@ def handle_planeta():
 
 @app.route('/planeta/<int:planeta_id>', methods=['GET'])
 def get_one_planeta():
-    
 
     response_body = {
         "msg": "Hello, this is your GET /planeta/favorito response "
     }
 
     return jsonify(response_body), 200
-
-
 
 
 # endpoints de vehiculos---------------------
@@ -254,3 +260,6 @@ if __name__ == '__main__':
 # Tu API actual no tiene un sistema de autenticación (todavía), es por eso que la única forma de
 # crear usuarios es directamente en la base de datos usando el Flask admin. forma de crear usuarios 
 # es directamente en la base de datos usando el Flask admin.
+
+# hecho [GET] /user/<int:people_id>------------no lo piden pero esta hecho tambien 
+# hecho [DELETE] /people/<int:people_id>------------no lo piden pero esta hecho tambien
