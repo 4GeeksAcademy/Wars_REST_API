@@ -28,7 +28,7 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 
-# Setup the Flask-JWT-Extended extension
+# Setup the Flask-JWT-Extended extension--------------------------------------------JWT aqui 
 app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
 jwt = JWTManager(app)
 
@@ -187,6 +187,9 @@ def get_one_vehiculos():
 
 #este endpoint es para verificar el registro de un usuario esta en la lista
 
+
+
+#endpoint de login--------------------------------------------------------------
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
 @app.route("/login", methods=["POST"])
