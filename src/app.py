@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User,Planeta,People,FavoritosPlaneta
+from models import db, User,Planeta,People,FavoritosPlaneta,Vehiculos
 
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
@@ -47,18 +47,24 @@ def sitemap():
 #endpoints-------------------------------------
 
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
+@app.route('/user', methods=['GET'])                    #funciona en postman :)
+def all_user():
+    query_results = User.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+
+    if results == []:
+         return jsonify({"msg": "user no found"}), 404
 
     response_body = {
-        "msg": "Hello, this is your GET /user response "
+        "msg": "Hello, this is your GET /user response ",
+        "results":results
     }
 
     return jsonify(response_body), 200
 
 
 @app.route('/user/<int:user_id>', methods=['GET'])
-def ghandle_user_favorito():
+def handle_user_favorito():
 
     response_body = {
         "msg": "Hello, this is your GET /user/favorito response "
@@ -68,14 +74,36 @@ def ghandle_user_favorito():
 
 
 
+@app.route("/user/<int:user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    
+
+    user_delete = User.query.filter_by(id=(user_id)).first()
+    if delete_user:
+
+    
+        db.session.delete(delete_user)
+        db.session.commit()
+        return jsonify({"msg":"user delete"}), 200
+    else:
+        return jsonify({"msg":"user exist"}), 400
+
+
+
 
    #endpoint de people--------------------------------
 
-@app.route('/people', methods=['GET'])
-def handle_people():
+@app.route('/people', methods=['GET'])                  #funciona en postman
+def all_people():
+    query_results = People.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+
+    if results == []:
+         return jsonify({"msg": "peoplo no found"}), 404
 
     response_body = {
-        "msg": "Hello, this is your GET /people response "
+        "msg": "Hello, this is your GET /user response ",
+        "results":results
     }
 
     return jsonify(response_body), 200
@@ -140,15 +168,21 @@ def delete_people(people_id):
 
 
 #endpoints de planetas------------------------------------
-@app.route('/planeta', methods=['GET'])
-def handle_planeta():
-   
+@app.route('/planeta', methods=['GET'])                 #funciona en postman
+def all_planeta():
+    query_results = Planeta.query.all()
+    results =list(map(lambda item :item.serialize(), query_results))
 
-    response_body = {
-        "msg": "Hello, this is your GET /planeta response "
+    if results == []:
+        return jsonify({"msg": "planetas no esta"}), 404
+    
+    response_body ={
+        "msg":"okis",
+        "results":results
     }
-
     return jsonify(response_body), 200
+
+        
 
 @app.route('/planeta/<int:planeta_id>', methods=['GET'])
 def get_one_planeta():
@@ -161,18 +195,63 @@ def get_one_planeta():
     return jsonify(response_body), 200
 
 
+@app.route('/planeta/', methods=['POST'])
+def create_planeta():
+    body= request.json
+    
+    planeta_query = Planeta.query.filter_by(nombre=body["nombre"]).first()
+    if planeta_query is None:
+
+
+        new_planeta_query = Planeta(nombre=body["nombre"], Gravedad=body["gravedad"],Poblacion=body["poblacion"],Habitable=body["Habitable"],Tipo=body["Tipo"],Clima=body["Clima"])
+        db.session.add(new_planeta_query)
+        db.session.commit()
+        return jsonify({"msg":"new_planeta_query created"}), 200
+    else:
+        return jsonify({"msg":"planeta_query exist"}), 400
+    
+
+
+@app.route('/favorite/planeta/<int:planeta_id>', methods=['POST'])  
+#  @jwt_required() #-------------------------descomentar cuando este puesto bien lo del token
+def user_favorito_planeta():
+    email = get_jwt_identity()
+    query_results = User.query.filter_by(email=email).first()
+    user_id = query_results.id
+    planeta_query = Planeta.query.filter_by(id="planeta_id").first()
+    if planeta_query is None:
+        return ({"msg": "this planeta doesn't exist"}), 400
+    else:
+        favorito_planeta_exist = FavoritosPlaneta.query.filter_by(planet_id="planet_id", user_id=user_id).first()
+        if favorito_planeta_exist is None:
+            nuevo_favorito_planeta = FavoritosPlaneta(planeta_id="planet_id", user_id=user_id).first()
+            db.session.add(nuevo_favorito_planeta)
+            db.session.commit()
+            return jsonify({"msg": "planeta added"}), 200
+        else:
+            return jsonify({"msg": "planeta already exist"}), 404
+
+
 
 
 # endpoints de vehiculos---------------------
 
-@app.route('/vehiculos', methods=['GET'])
-def ghandle_vehiculos():
 
-    response_body = {
-        "msg": "Hello, this is your GET /vehiculos response "
+
+@app.route('/vehiculos', methods=['GET'])                #no me funciona en postman no se porque aaaaaaaaa
+def all_vehiculos():
+    query_results = Vehiculos.query.all()
+    results =list(map(lambda item :item.serialize(), query_results))
+
+    if results == []:
+        return jsonify({"msg": "vehiculos no esta"}), 404
+    
+    response_body ={
+        "msg":"okis",
+        "results":results
     }
-
     return jsonify(response_body), 200
+
 
 
 @app.route('/vehiculos/<int:people_id>', methods=['GET'])
@@ -183,6 +262,22 @@ def get_one_vehiculos():
     }
 
     return jsonify(response_body), 200
+
+
+#endpoint para los favoritos ------------------------------
+
+# @app.route('/favorite/planeta/<int:planet_id>', methods=['DELETE'])   
+# def delete_planet(planet_id):
+#     planeta_deleted = Planeta.query.filter_by(id=planeta_id).first()
+#     if planeta_deleted:
+#         db.session.delete(planeta_deleted)
+#         db.session.commit()
+#         return jsonify({"msg": "planeta was successfully deleted"}), 200
+#     else:
+#         return jsonify({"msg": "planeta not found"}), 404 
+
+
+
 
 
 #este endpoint es para verificar el registro de un usuario esta en la lista
@@ -254,10 +349,7 @@ if __name__ == '__main__':
 
 # hecho [GET] /users Listar todos los usuarios del blog.
 # [GET] /users/favorites Listar todos los favoritos que pertenecen al usuario actual.
-# [POST] /favorite/planet/<int:planet_id> Añade un nuevo planet favorito al usuario actual con el id = planet_id.
+# hecho [POST] /favorite/planet/<int:planet_id> Añade un nuevo planet favorito al usuario actual con el id = planet_id.
 # [POST] /favorite/people/<int:people_id> Añade un nuevo people favorito al usuario actual con el id = people_id.
 # [DELETE] /favorite/planet/<int:planet_id> Elimina un planet favorito con el id = planet_id.
 # [DELETE] /favorite/people/<int:people_id> Elimina un people favorito con el id = people_id.
-# Tu API actual no tiene un sistema de autenticación (todavía), es por eso que la única forma de
-# crear usuarios es directamente en la base de datos usando el Flask admin. forma de crear usuarios 
-# es directamente en la base de datos usando el Flask admin.
