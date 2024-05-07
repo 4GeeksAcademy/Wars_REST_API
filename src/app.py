@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User,Planeta,People,FavoritosPlaneta,Vehiculos
+from models import db, User,Planeta,People,FavoritosPlaneta,Vehiculos,FavoritosPeople
 
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
@@ -63,11 +63,11 @@ def all_user():
     return jsonify(response_body), 200
 
 
-@app.route('/user/<int:user_id>', methods=['GET'])
+@app.route('/user/<int:user_id>', methods=['GET'])          #este no me queda claro si esta funcionando 
 def handle_user_favorito():
 
     response_body = {
-        "msg": "Hello, this is your GET /user/favorito response "
+        "msg": "Hello, this is your GET /user/ response "
     }
 
     return jsonify(response_body), 200
@@ -85,6 +85,23 @@ def delete_user(user_id):
         db.session.delete(delete_user)
         db.session.commit()
         return jsonify({"msg":"user delete"}), 200
+    else:
+        return jsonify({"msg":"user exist"}), 400
+
+
+
+@app.route('/user', methods=['POST'])
+def create_user():
+    body= request.json
+    
+    user_query = User.query.filter_by(nombre=body["nombre"]).first()
+    if user_query is None:
+
+
+        new_user = User(id=body["id"], email=body["email"])
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"msg":"user created"}), 200
     else:
         return jsonify({"msg":"user exist"}), 400
 
@@ -238,20 +255,40 @@ def user_favorito_planeta():
 
 
 
-@app.route('/vehiculos', methods=['GET'])                #no me funciona en postman no se porque aaaaaaaaa
-def all_vehiculos():
-    query_results = Vehiculos.query.all()
-    results =list(map(lambda item :item.serialize(), query_results))
+# @app.route('/vehiculos', methods=['GET'])                #no me funciona en postman no se porque aaaaaaaaa
+# def all_vehiculos():
+#     query_results = Vehiculos.query.all()
+#     results =list(map(lambda item :item.serialize(), query_results))
 
-    if results == []:
-        return jsonify({"msg": "vehiculos no esta"}), 404
+#     if results == []:
+#         return jsonify({"msg": "vehiculos no esta"}), 404
     
-    response_body ={
-        "msg":"okis",
-        "results":results
-    }
-    return jsonify(response_body), 200
+#     response_body ={
+#         "msg":"okis",
+#         "results":results
+#     }
+#     return jsonify(response_body), 200
 
+
+
+# @app.route('/vehiculos/<int:people_id>', methods=['GET'])
+# def get_one_vehiculos():
+
+#     response_body = {
+#         "msg": "Hello, this is your GET /vehiculos/favorito response "
+#     }
+
+#     return jsonify(response_body), 200
+
+
+@app.route('/vehiculos', methods=['GET'])   #esta si funciona pero es mas simple
+def ghandle_vehiculos():
+
+    response_body = {
+        "msg": "Hello, this is your GET /vehiculos response "
+    }
+
+    return jsonify(response_body), 200
 
 
 @app.route('/vehiculos/<int:people_id>', methods=['GET'])
