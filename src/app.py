@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User,Planeta,People,FavoritosPlaneta,Vehiculos,FavoritosPeople
+from models import db, User,Planeta,People,FavoritosPlaneta,Vehiculos,FavoritosPeople,FavoritosVehiculos
 
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
@@ -303,6 +303,27 @@ def get_one_vehiculos():
 
 #endpoint para los favoritos ------------------------------
 
+
+def delete_favorite_vehiculo(vehiculo_id):
+    
+    body = request.json
+    query_results = User.query.filter_by(id=body["id"]).first()
+    if query_results is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        query_results = Vehiculos.query.filter_by(id=vehiculo_id).first()
+        if query_results is None:
+            return jsonify({"msg" : "Vehiculos doesn't exist"}), 404
+        else:
+            query_results_favorito_vehiculo = FavoritosVehiculos.query.filter_by(vehiculo_id=vehiculo_id, user_id=body["id"]).first()
+            if query_results_favorito_vehiculo is None:
+                return jsonify({"msg" : "Vehicle not found"}), 400
+            else:
+                delete_favorite_vehiculo = FavoritosVehiculos.query.filter_by(vehiculo_id=vehiculo_id, user_id=body["id"]).first()
+                db.session.delete(delete_favorite_vehiculo)
+                db.session.commit()
+                return jsonify({"msg" : "vehiculo deleted from favorites"}), 200
+
 # @app.route('/favorite/planeta/<int:planet_id>', methods=['DELETE'])   
 # def delete_planet(planet_id):
 #     planeta_deleted = Planeta.query.filter_by(id=planeta_id).first()
@@ -322,8 +343,7 @@ def get_one_vehiculos():
 
 
 #endpoint de login--------------------------------------------------------------
-#el github que estoy haciendo la prueba
-# https://github.com/adripower/react-hello-webapp
+
 
 #
 # Create a route to authenticate your users and return JWTs. The
